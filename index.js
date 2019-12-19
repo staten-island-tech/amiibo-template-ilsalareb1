@@ -5,37 +5,54 @@ const app = express();
 
 //define paths for express
 const publicDirectoryPath = path.join(__dirname, "../public");
-const partialPath = path.join(__dirname, "../templates/partials");
+const partialsPath = path.join(__dirname, "../templates/partials");
 const viewsPath = path.join(__dirname, "../templates/views");
 //setup handlebars engine and views location
 app.set("view engine", "hbs");
 app.set("views", viewsPath); //telling express to get templates from templates/views folder
-hbs.registerPartials(partialPath);
-app.get(" ", async (req, res) => {
-try {
-res.render("index", {
-    title: "Our first Express App"
-});
-} catch {
-res.status(500).send();
-}
-});
-
-app.get("/about/:id", async (req, res) => {
-    const 
-    try {
+hbs.registerPartials(partialsPath);
+//set up our static asset directory 
+app.use (express.static(publicDirectoryPath));
+app.get("", async (req, res) => {
+  try {
     res.render("index", {
-        title: `${name}`
+      title: "App"
     });
-    } catch {
+  } catch {
     res.status(500).send();
-    }
+  }
+});
+app.get("/about/:id", async (req, res) => {
+  const name = req.params.id;
+  try {
+    res.render("index", {
+      title: name
+    });
+  } catch {
+    res.status(500).send();
+  }
+});
+app.get("/anything", async (req, res) => {
+  try {
+    res.render("swag");
+  } catch {
+    res.status(500).send();
+  }
+});
+/* app.get("/about/:id", async (req, res) => {
+  const test = req.params.id;
+  try {
+    res.render("index", {
+      title: `${test}`
+    });
+  } catch {
+    res.status(500).send();
+  }
+}); */
+
+app.listen(3000, () => {
+  console.log("Listening on port 3000");
+  console.log(viewsPath);
 });
 
-app.get("/swag", async (req, res) => {
-    try {
-    res.render("swag");
-    } catch {
-    res.status(500).send();
-    }
-});
+//127.0.0.1:3000
